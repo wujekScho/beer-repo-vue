@@ -1,6 +1,6 @@
 <template>
     <div>
-        <button @click.prevent="show">Login</button>
+        <button @click.prevent="show">LOGIN</button>
         <modal name="login-modal">
             <form>
                 <div>
