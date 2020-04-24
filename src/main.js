@@ -1,14 +1,16 @@
 import Vue from 'vue'
 import App from './App.vue'
 import api from './api'
+import VueRouter from 'vue-router'
 import store from './store/store.js'
-import VModal from 'vue-js-modal'
+import router from "./router"
 
-Vue.use(VModal);
+Vue.use(VueRouter);
 Vue.config.productionTip = false;
 Vue.prototype.$http = api;
 
 new Vue({
     render: h => h(App),
-    store
+    store,
+    router
 }).$mount('#app')
