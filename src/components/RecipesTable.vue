@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="recipes.length">
         <table>
             <thead>
             <tr>
@@ -12,14 +12,14 @@
             </tr>
             </thead>
             <tbody>
-            <tr :key="brewing.id" v-for="brewing in recipes">
-                <td>{{brewing.name}}</td>
-                <td>{{brewing.style}}</td>
-                <td>{{brewing.gravity}}</td>
-                <td>{{brewing.volume}}</td>
-                <td>{{brewing.yeast.name}}</td>
+            <tr :key="recipe.id" v-for="recipe in recipes">
+                <td>{{recipe.name}}</td>
+                <td>{{recipe.style}}</td>
+                <td>{{recipe.gravity}}</td>
+                <td>{{recipe.volume}}</td>
+                <td>{{recipe.yeast.name}}</td>
                 <td>
-                    <button v-on:click="$emit('delete-recipe', brewing.id)">
+                    <button @click="removeRecipe(recipe.id)">
                         x
                     </button>
                 </td>
@@ -32,8 +32,18 @@
 <script>
     export default {
         name: "RecipesTable",
-        props: {
-            recipes: []
+        computed: {
+            recipes() {
+                return this.$store.getters.recipes;
+            }
         },
+        created() {
+            this.$store.dispatch('refreshRecipes');
+        },
+        methods: {
+            removeRecipe(recipeId) {
+                this.$store.dispatch('removeRecipe', recipeId)
+            }
+        }
     }
 </script>

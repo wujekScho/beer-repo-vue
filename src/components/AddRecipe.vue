@@ -10,18 +10,16 @@
                     {{ yeast.name }}
                 </option>
             </select>
-            <button @click="addRecipe">Add</button>
+            <button @click.prevent="addRecipe">Add</button>
         </form>
     </div>
 </template>
 
 <script>
-    import api from "../api";
 
     export default {
         data() {
             return {
-                yeasts: [],
                 yeastId: Number,
                 name: "",
                 style: "",
@@ -29,19 +27,19 @@
                 volume: Number
             }
         },
+        computed: {
+            yeasts() {
+                return this.$store.getters.yeasts;
+            }
+        },
         created() {
-            api
-                .get("yeasts")
+            this.$store.dispatch('refreshYeasts')
                 .then(res => {
-                    this.yeasts = res.data.entity;
-                    this.yeastId = this.yeasts[0].id;
-                })
-                .catch(err => console.log(err));
+                    this.yeastId = res[0].id;
+                });
         },
         methods: {
-            addRecipe: function (event) {
-                event.preventDefault();
-
+            addRecipe() {
                 let recipe = {
                     name: this.name,
                     gravity: this.gravity,
@@ -49,19 +47,15 @@
                     style: this.style,
                     yeastId: this.yeastId
                 }
-
-                api
-                    .post("brewings", recipe)
-                    .then(res => {
-                        if (res.status === 201) {
-                            this.$emit('recipe-added', res.data.entity);
-                        } else {
-                            console.log("Unknown status")
-                        }
-                    })
-                    .catch(err => {
-                        console.log("Unexpected error occurred" + err);
-                    })
+                this.$store.dispatch('addRecipe', recipe);
+                this.clearData();
+            },
+            clearData() {
+                this.name = '';
+                this.gravity = null;
+                this.volume = null;
+                this.style = '';
+                this.yeastId = this.yeasts[0].id;
             }
         }
     }
