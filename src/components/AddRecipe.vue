@@ -1,22 +1,46 @@
 <template>
     <div>
-        <form v-if="yeasts.length">
-            <input placeholder="Name" v-model="name">
-            <input placeholder="Style" v-model="style">
-            <input min="0.1" placeholder="Gravity" step="0.1" type="number" v-model="gravity">
-            <input min="0.1" placeholder="Volume" step="0.1" type="number" v-model="volume">
-            <select v-model="yeastId">
-                <option :key="yeast.id" :value="yeast.id" v-for="yeast in yeasts">
-                    {{ yeast.name }}
-                </option>
-            </select>
-            <button @click.prevent="addRecipe">Add</button>
-        </form>
+        <button @click="show" class="btn">Add recipe</button>
+        <modal :adaptive="true" :height="400" name="add-recipe">
+            <div class="px-8 py-4">
+                <h1 class="font-mono py-4 w-full text-center">Add recipe</h1>
+                <form v-if="yeasts.length">
+                    <div>
+                        <label class="label" for="name">Name</label>
+                        <input class="input" id="name" placeholder="Name" v-model="name">
+                    </div>
+                    <div class="pt-2">
+                        <label class="label" for="style">Style</label>
+                        <input class="input" id="style" placeholder="Style" v-model="style">
+                    </div>
+                    <div class="flex -mx-2 mb-2">
+                        <div class="w-1/3 px-2 pt-2">
+                            <label class="label" for="gravity">Gravity </label>
+                            <input class="input" id="gravity" min="0.1" placeholder="Gravity" step="0.1" type="number"
+                                   v-model="gravity">
+                        </div>
+                        <div class="w-1/3 px-2 pt-2">
+                            <label class="label" for="volume">Volume</label>
+                            <input class="input" id="volume" min="0.1" placeholder="Volume" step="0.1" type="number"
+                                   v-model="volume">
+                        </div>
+                        <div class="w-1/3 px-2 pt-2">
+                            <label class="label" for="yeast">Yeast</label>
+                            <select class="select" id="yeast" v-model="yeastId">
+                                <option :key="yeast.id" :value="yeast.id" v-for="yeast in yeasts">
+                                    {{ yeast.name }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <button @click.prevent="addRecipe" class="btn">Add</button>
+                </form>
+            </div>
+        </modal>
     </div>
 </template>
 
 <script>
-
     export default {
         data() {
             return {
@@ -56,6 +80,12 @@
                 this.volume = null;
                 this.style = '';
                 this.yeastId = this.yeasts[0].id;
+            },
+            show() {
+                this.$modal.show('add-recipe');
+            },
+            hide() {
+                this.$modal.hide('add-recipe');
             }
         }
     }

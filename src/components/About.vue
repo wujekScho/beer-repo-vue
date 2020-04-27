@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>This is about site</h1>
+        <h1>Fun project to learn vue</h1>
     </div>
 </template>
 

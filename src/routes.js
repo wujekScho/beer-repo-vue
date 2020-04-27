@@ -5,6 +5,11 @@ import LoginModal from "./components/LoginModal";
 
 const routes = [
     {
+        path: '/',
+        component: Recipes,
+        meta: {authenticated: true}
+    },
+    {
         path: '/login',
         component: LoginModal,
         meta: {visitor: true}

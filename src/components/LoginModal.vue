@@ -39,16 +39,17 @@
         },
         methods: {
             login() {
+                this.loginError = false;
                 this.$store.dispatch('retrieveToken', {
                     login: this.email,
                     password: this.password
                 })
                     .then(() => {
-                        this.loginError = false;
+                        this.$router.push('/recipes');
                     })
                     .catch(err => {
-                            if (err.response.status === 401) {
-                                this.loginError = true;
+                        if (err.response.status === 401) {
+                            this.loginError = true;
                             }
                         }
                     )

@@ -13,6 +13,11 @@
     @apply bg-blue-500 text-white border-transparent
 }
 
+button.btn {
+    padding: 6px;
+    @apply px-4
+}
+
 .label {
     @apply block text-gray-700 text-sm font-bold mb-1
 }
@@ -35,4 +40,20 @@
 
 .input-error:focus {
     @apply outline-none shadow-outline
+}
+
+.select {
+    @apply block bg-white shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight
+}
+
+.select:focus {
+    @apply outline-none shadow-outline
+}
+
+.tr-even-odd:nth-child(even) {
+    @apply bg-gray-200
+}
+
+.tr-even-odd:hover {
+    @apply bg-gray-400 cursor-pointer
 }
