@@ -7,9 +7,8 @@
                 <form v-if="yeasts.length">
                     <div>
                         <label class="label" for="name">Name</label>
-                        <input class="input" v-bind:class="{'input-error': submitted && $v.name.$error}" id="name"
-                               placeholder="Name"
-                               v-model="name">
+                        <input class="input" v-bind:class="{'input-error': (submitted && $v.name.$error) || nameTaken}"
+                               id="name" placeholder="Name" v-model="name">
                         <p class="error-message" v-if="submitted && !$v.name.required">Name is required</p>
                         <p class="error-message" v-if="nameTaken">Passed name is already taken</p>
                     </div>
@@ -25,16 +24,16 @@
                             <input class="input" v-bind:class="{'input-error': submitted && $v.gravity.$error}"
                                    id="gravity" min="0.1" placeholder="Gravity" step="0.1" type="number"
                                    v-model="gravity">
-                            <p class="error-message" v-if="submitted && !$v.gravity.minValue">Gravity must be greater
-                                than 0.1</p>
+                            <p class="error-message" v-if="submitted && !$v.gravity.minValue">Gravity must be greater than 0.1</p>
+                            <p class="error-message" v-if="submitted && !$v.gravity.required">Gravity is required</p>
                         </div>
                         <div class="w-1/3 px-2 pt-2">
                             <label class="label" for="volume">Volume</label>
                             <input class="input" v-bind:class="{'input-error': submitted && $v.volume.$error}"
                                    id="volume" min="0.1" placeholder="Volume" step="0.1" type="number"
                                    v-model="volume">
-                            <p class="error-message" v-if="submitted && !$v.volume.minValue">Gravity must be greater
-                                than 0.1</p>
+                            <p class="error-message" v-if="submitted && !$v.volume.minValue">Volume must be greater than 0.1</p>
+                            <p class="error-message" v-if="submitted && !$v.volume.required">Volume is required</p>
                         </div>
                         <div class="w-1/3 px-2 pt-2">
                             <label class="label" for="yeast">Yeast</label>
@@ -71,8 +70,13 @@
             yeastId: {required},
             name: {required},
             style: {required},
-            gravity: {minValue: minValue(0.1)},
-            volume: {minValue: minValue(0.1)}
+            gravity: {required,minValue: minValue(0.1)},
+            volume: {required,minValue: minValue(0.1)}
+        },
+        watch: {
+            name() {
+                this.nameTaken = false;
+            }
         },
         computed: {
             yeasts() {
@@ -89,7 +93,6 @@
             addRecipe() {
                 this.submitted = true;
                 this.$v.$touch();
-
                 if (this.$v.$invalid) {
                     return;
                 }
@@ -101,13 +104,20 @@
                     style: this.style,
                     yeastId: this.yeastId
                 }
+
+                console.log(recipe);
+
                 this.$store.dispatch('addRecipe', recipe)
                     .then(() => {
                         this.clearData();
                         this.hide();
                     })
                     .catch(err => {
-                        console.log(err.response.data); //todo implement validation here
+                        let violations = err.response.data.parameterViolations;
+                        let filter = violations.filter(v => v.message.includes('Brewing with passed name already exist.'));
+                        if (filter.length) {
+                            this.nameTaken = true;
+                        }
                     });
             },
             clearData() {
@@ -116,12 +126,15 @@
                 this.volume = null;
                 this.style = '';
                 this.yeastId = this.yeasts[0].id;
+                this.submitted = false;
+                this.nameTaken = false;
             },
             show() {
                 this.$modal.show('add-recipe');
             },
             hide() {
                 this.$modal.hide('add-recipe');
+                this.clearData();
             }
         }
     }
