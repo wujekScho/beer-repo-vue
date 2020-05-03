@@ -5,10 +5,12 @@ import VueRouter from 'vue-router'
 import store from './store/store.js'
 import router from "./router"
 import VModal from 'vue-js-modal'
+import Vuelidate from "vuelidate";
 import '@/assets/css/tailwind.css'
 
 Vue.use(VueRouter);
 Vue.use(VModal);
+Vue.use(Vuelidate);
 Vue.config.productionTip = false;
 Vue.prototype.$http = api;
 

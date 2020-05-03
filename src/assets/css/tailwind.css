@@ -57,3 +57,7 @@ button.btn {
 .tr-even-odd:hover {
     @apply bg-gray-400 cursor-pointer
 }
+
+.error-message {
+    @apply text-red-500 text-base italic
+}
