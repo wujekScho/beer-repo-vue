@@ -1,7 +1,7 @@
 <template>
     <div>
         <button @click="show" class="btn">Add recipe</button>
-        <modal :adaptive="true" :height="400" name="add-recipe">
+        <modal :adaptive="true" height="auto" @before-close="clearData" name="add-recipe">
             <div class="px-8 py-4">
                 <h1 class="font-mono py-4 w-full text-center">Add recipe</h1>
                 <form v-if="yeasts.length">
@@ -96,7 +96,6 @@
                 if (this.$v.$invalid) {
                     return;
                 }
-
                 let recipe = {
                     name: this.name,
                     gravity: this.gravity,
@@ -104,9 +103,6 @@
                     style: this.style,
                     yeastId: this.yeastId
                 }
-
-                console.log(recipe);
-
                 this.$store.dispatch('addRecipe', recipe)
                     .then(() => {
                         this.clearData();

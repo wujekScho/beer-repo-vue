@@ -2,6 +2,7 @@ import Recipes from "./components/Recipes";
 import About from "./components/About";
 import NotFound from "./components/NotFound";
 import LoginModal from "./components/LoginModal";
+import RegistrationModal from "./components/RegistrationModal";
 
 const routes = [
     {
@@ -12,6 +13,11 @@ const routes = [
     {
         path: '/login',
         component: LoginModal,
+        meta: {visitor: true}
+    },
+    {
+        path: '/register',
+        component: RegistrationModal,
         meta: {visitor: true}
     },
     {
