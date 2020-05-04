@@ -1,6 +1,7 @@
 <template>
     <div class="w-full max-w-xs">
         <form class="bg-white shadow-md rounded px-6 py-4">
+            <h1 class="font-sans py-4 w-full text-center">Login</h1>
             <div class="mb-4">
                 <label class="label"
                        for="email">Login</label>
